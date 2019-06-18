@@ -65,6 +65,21 @@ scripts/
 ########################
 
 qsub scripts/process_dipx.sh
+```
+
+This approach is specific to building SNP tables for samples pools sequenced (or sequenced) obtained 
+from a synthetic population with known and sequenced "founders".  Given that the founders are highly
+chracterized SNPs can be divided into 3 flavors.  All SNPs indentified in the founders (including ones
+that are not genotyped reliably), well-behaved or what we call Granny SNPs (these are SNPs that can be
+genotyped very reliably, what you grandmother would classifly as a SNP based on how you defined it to
+her), and candidate new mutations (SNPs never seen in the founders).  Viewing the world this way is 
+justified for synthetic populations and avoids the GATK shit-show associated with "adding one sample",
+when you have a large number of samples (we find GATK's newer algorithms are increasingly problematic for
+poolseq data where the sample is not diploid at any rate). So GATK is used to identify and filter SNPs
+in the founders, but that is the only time it is used.  This pipeline assumes you show up to play with the 
+two lists of SNPs obtained from the founders using GATK.
+
+```R
 
 ########################
 ## exclude failed samples...
