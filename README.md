@@ -130,6 +130,7 @@ qsub -t 1-7242 scripts/haplotype.limSolve.general.sh $input May1/haplos/T3 SNPta
 sh scripts/haplotyper.merge.sh May1/haplos/T3 BAS02_chrI_hap_freq.txt haps.dipx.June11.F15AW5050.limSolve.txt.gz
 
 ```
+```bash
 library(limSolve)
 
 # https://rdrr.io/cran/limSolve/man/lsei.html
@@ -161,3 +162,4 @@ H = matrix(rep(0,d))
 Wa = weights          # of course I was also doing a weighted regression ... why not
 
 out = lsei(A=A,B=B,E=E,F=F,G=G,H=H,Wa=Wa,verbose=TRUE)
+```
