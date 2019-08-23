@@ -1,7 +1,7 @@
 #!/bin/bash
 #$ -N lhap
 #$ -q bio,pub8i,abio128
-#$ -tc 400
+#$ -tc 600
 #$ -ckpt restart
 #$ -pe openmp 2
 #$ -R y

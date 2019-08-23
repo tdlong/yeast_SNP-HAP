@@ -95,8 +95,10 @@ runscan <- function(inputfile, chr, poolroot, founderfile, outdir){
 		# similar in some window.  Another strategy would be to calculate haplotype frequencies, but print 
 		# minManhattan.  Even better would be to think about which haplotypes are not distinguishable, and print that
 		
-		# Note that the haplotype frequencies are constrained to sum to one and are 
-		# bounded by 0.01 and 0.99
+		# Note that the haplotype frequencies are constrained to sum to one and have a minimum 
+		# frequency of 0.002.  This means the maximum haplotpe frequency is 96.8%.
+		# There are 17 haplotypes, if 16 have a frequency of 0.2% then the 17th
+		# is 96.8%
 
 
 		MynumberSNP<- nrow(predictors)
@@ -112,8 +114,8 @@ runscan <- function(inputfile, chr, poolroot, founderfile, outdir){
 			B = Y
 			E = t(matrix(rep(1,d)))
 			F = 1
-			G = diag(c(rep(1,d),rep(-1,d)))
-			H = matrix(c(rep(0.01,d),rep(-0.99,d)))
+			G = diag(rep(1,d))
+			H = matrix(rep(0.005,d))
 			#  G = diag(rep(1,d))
 			#  H = matrix(rep(0,d))
 			Wa = weights
