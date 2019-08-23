@@ -165,6 +165,6 @@ out = lsei(A=A,B=B,E=E,F=F,G=G,H=H,Wa=Wa,verbose=TRUE)
 ```
 I can also bound my parameter estimates to sum to 1 and be between 1% and 99% each
 ```bash
-G = diag(c(rep(1,d),rep(-1,d)))
-H = matrix(c(rep(0.01,d),rep(-0.99,d)))
+G = diag(rep(1,d))
+H = matrix(rep(0.005,d))
 ```
