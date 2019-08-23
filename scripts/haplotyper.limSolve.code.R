@@ -94,6 +94,11 @@ runscan <- function(inputfile, chr, poolroot, founderfile, outdir){
 		# the current code basically will not calculate haplotype frequencies if two founders are really
 		# similar in some window.  Another strategy would be to calculate haplotype frequencies, but print 
 		# minManhattan.  Even better would be to think about which haplotypes are not distinguishable, and print that
+		
+		# Note that the haplotype frequencies are constrained to sum to one and are 
+		# bounded by 0.01 and 0.99
+
+
 		MynumberSNP<- nrow(predictors)
 		if(nrow(predictors)<10){
 			myadjrsquare <- NA
@@ -107,8 +112,10 @@ runscan <- function(inputfile, chr, poolroot, founderfile, outdir){
 			B = Y
 			E = t(matrix(rep(1,d)))
 			F = 1
-			G = diag(rep(1,d))
-			H = matrix(rep(0,d))
+			G = diag(rep(1,d),rep(-1,d))
+			H = matrix(c(rep(0.01,d),rep(-0.99,d)))
+			#  G = diag(rep(1,d))
+			#  H = matrix(rep(0,d))
 			Wa = weights
 			out = lsei(A=A,B=B,E=E,F=F,G=G,H=H,Wa=Wa,verbose=TRUE)
 			myadjrsquare <- out$residualNorm                 
