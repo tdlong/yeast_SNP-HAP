@@ -130,3 +130,34 @@ qsub -t 1-7242 scripts/haplotype.limSolve.general.sh $input May1/haplos/T3 SNPta
 sh scripts/haplotyper.merge.sh May1/haplos/T3 BAS02_chrI_hap_freq.txt haps.dipx.June11.F15AW5050.limSolve.txt.gz
 
 ```
+library(limSolve)
+
+# https://rdrr.io/cran/limSolve/man/lsei.html
+# https://cran.r-project.org/web/packages/limSolve/vignettes/limSolve.pdf
+
+#In matrix notation, linear inverse problems are defined as:
+#A·x ~= b  (1)
+#E·x = f   (2)
+#G·x >= h  (3)
+#There are three sets of linear equations:  equalities that have to be met as closely as possible (1), equalities that have to be met exactly (2) and inequalities (3).
+
+# Typically:
+# (1) is a linear regression model (A = design matrix {n,d}, b = observations {n}, x = predictors {d})
+# (2) is an exact constraint (e.g., the coefficients sum to 1), then E is {ec,d}, f is {ec}, where ec is the number of exact constraints.
+# (3) is an inequality (e.g., all coefficients are positive), then G is {ic,d}, h is {ic}, where ic is the number of inequality constraints
+
+# in the example below the xi's sum to one (so E is row matrix of d ones).
+# and
+# each xi is >= 0 (so G is an Identity matrix of rank d AND H is a column vector of zeros)
+# the constraint on the sum means I do not have specify each xi is <= 1 (equivalent to saying each -xi >= -1)
+
+d = ncol(predictors)
+A = predictors
+B = Y
+E = t(matrix(rep(1,d)))
+F = 1
+G = diag(rep(1,d))
+H = matrix(rep(0,d))
+Wa = weights          # of course I was also doing a weighted regression ... why not
+
+out = lsei(A=A,B=B,E=E,F=F,G=G,H=H,Wa=Wa,verbose=TRUE)
