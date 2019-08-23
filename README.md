@@ -65,6 +65,11 @@ scripts/
 ########################
 
 qsub scripts/process_dipx.sh
+```
+
+This approach is specific to building SNP tables from poolseq samples (or diploid or haploid individuals) obtained from a synthetic population with known and sequenced "founders".  Since the founders are highly chracterized, SNPs can be divided into 3 flavors: 1) all SNPs indentified in the founders (including ones that are not genotyped reliably), 2) well-behaved or what we call Granny SNPs (these are SNPs that can be genotyped very reliably, or what you grandmother would classifly as a SNP based on how you defined a SNP to her, think aggressive filtering), and candidate new mutations (SNPs never seen in the founders, even as bad looking SNPs).  Viewing the world this way is justified for synthetic populations and avoids the GATK shit-show associated with "adding one sample" when you have a large number of samples. We are also finding GATK's newer algorithms (v4) increasingly problematic for poolseq data where the sample is not diploid. So although GATK is the industry standard we only use it to identify and filter SNPs in the founders (what it is designed to do), but then we avoid its use for calling SNPs in samples pulled from the population.  This pipeline assumes you show up to play with the two lists of SNPs obtained from the founders using GATK (but we do not describe that pipeline).
+
+```R
 
 ########################
 ## exclude failed samples...
@@ -124,4 +129,42 @@ qsub -t 1-7242 scripts/haplotype.limSolve.general.sh $input May1/haplos/T3 SNPta
 # sh haplotyper.merge.sh dir get_header outfile
 sh scripts/haplotyper.merge.sh May1/haplos/T3 BAS02_chrI_hap_freq.txt haps.dipx.June11.F15AW5050.limSolve.txt.gz
 
+```
+```bash
+library(limSolve)
+
+# https://rdrr.io/cran/limSolve/man/lsei.html
+# https://cran.r-project.org/web/packages/limSolve/vignettes/limSolve.pdf
+
+#In matrix notation, linear inverse problems are defined as:
+#A·x ~= b  (1)
+#E·x = f   (2)
+#G·x >= h  (3)
+#There are three sets of linear equations:  equalities that have to be met as closely as possible (1), equalities that have to be met exactly (2) and inequalities (3).
+
+# Typically:
+# (1) is a linear regression model (A = design matrix {n,d}, b = observations {n}, x = predictors {d})
+# (2) is an exact constraint (e.g., the coefficients sum to 1), then E is {ec,d}, f is {ec}, where ec is the number of exact constraints.
+# (3) is an inequality (e.g., all coefficients are positive), then G is {ic,d}, h is {ic}, where ic is the number of inequality constraints
+
+# in the example below the xi's sum to one (so E is row matrix of d ones).
+# and
+# each xi is >= 0 (so G is an Identity matrix of rank d AND H is a column vector of zeros)
+# the constraint on the sum means I do not have specify each xi is <= 1 (equivalent to saying each -xi >= -1)
+
+d = ncol(predictors)
+A = predictors
+B = Y
+E = t(matrix(rep(1,d)))
+F = 1
+G = diag(rep(1,d))
+H = matrix(rep(0,d))
+Wa = weights          # of course I was also doing a weighted regression ... why not
+
+out = lsei(A=A,B=B,E=E,F=F,G=G,H=H,Wa=Wa,verbose=TRUE)
+```
+I can also bound my parameter estimates to sum to 1 and be between 1% and 99% each
+```bash
+G = diag(rep(1,d),rep(-1,d))
+H = matrix(c(rep(0.01,d),rep(-0.99,d)))
 ```
