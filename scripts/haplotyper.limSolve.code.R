@@ -112,7 +112,7 @@ runscan <- function(inputfile, chr, poolroot, founderfile, outdir){
 			B = Y
 			E = t(matrix(rep(1,d)))
 			F = 1
-			G = diag(rep(1,d),rep(-1,d))
+			G = diag(c(rep(1,d),rep(-1,d)))
 			H = matrix(c(rep(0.01,d),rep(-0.99,d)))
 			#  G = diag(rep(1,d))
 			#  H = matrix(rep(0,d))
