@@ -163,3 +163,8 @@ Wa = weights          # of course I was also doing a weighted regression ... why
 
 out = lsei(A=A,B=B,E=E,F=F,G=G,H=H,Wa=Wa,verbose=TRUE)
 ```
+I can also bound my parameter estimates to sum to 1 and be between 1% and 99% each
+```bash
+G = diag(rep(1,d),rep(-1,d))
+H = matrix(c(rep(0.01,d),rep(-0.99,d)))
+```
