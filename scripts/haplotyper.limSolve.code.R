@@ -115,7 +115,7 @@ runscan <- function(inputfile, chr, poolroot, founderfile, outdir){
 			E = t(matrix(rep(1,d)))
 			F = 1
 			G = diag(rep(1,d))
-			H = matrix(rep(0.005,d))
+			H = matrix(rep(0.0003,d))
 			#  G = diag(rep(1,d))
 			#  H = matrix(rep(0,d))
 			Wa = weights
