@@ -168,3 +168,7 @@ I can also bound my parameter estimates to sum to 1 and be between 1% and 99% ea
 G = diag(rep(1,d))
 H = matrix(rep(0.005,d))
 ```
+
+This was the code used to call haplotypes for the 18-way resource paper.  Over time I (ADL) have tried to streamline, speedup, simply, and improve upon this code.  Watch for a new archive here in the near future ... (or email me) with the code I would use to call haplotypes.
+
+
